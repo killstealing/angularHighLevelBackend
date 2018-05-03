@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmy.mapper.UserMapper">
+	<select id="getUsers" resultType="com.lmy.pojo.User">
+		select * from user_t
+	</select>
+	<select id="getUsersByName" parameterType="java.lang.String" resultType="com.lmy.pojo.User">
+		select * from user_t where name like "%"#{_parameter}"%"
+	</select>
+	<select id="getUserByEmail" parameterType="string" resultType="com.lmy.pojo.User">
+		select * from user_t where email =#{_parameter}
+	</select>
+</mapper>

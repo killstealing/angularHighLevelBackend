@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmy.mapper.TaskListMapper">
+	<select id="getLastTaskList" resultType="com.lmy.pojo.TaskList">
+		select id,title,order_num orderNum,project_id projectId 
+		from task_list order by order_num desc limit 1
+	</select>
+
+	<insert id="doInsert" parameterType="com.lmy.pojo.TaskList">
+		insert into task_list <!-- (id,title,order_num,project_id) -->
+		values (default,#{title},#{orderNum},#{projectId})
+	</insert>
+
+	<delete id="doDel" parameterType="int">
+		delete from task_list where id=#{id}
+	</delete>
+
+	<select id="getTaskListById" parameterType="int" resultType="com.lmy.pojo.TaskList">
+		select id,title,order_num orderNum,project_id projectId
+		 from task_list where id=#{id}
+	</select>
+	
+	<update id="doUpdateTaskList" parameterType="com.lmy.pojo.TaskList">
+		update task_list 
+		<trim prefix="set" suffixOverrides=",">    
+			<if test="title!=null">
+				title=#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNum!=0">
+				order_num=#{orderNum,jdbcType=INTEGER},
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+	
+	<update id="doUpdateTaskList1" parameterType="com.lmy.pojo.TaskList">
+		update task_list 
+		<set>
+			<if test="title!=null">
+				title=#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNum!=0">
+				order_num=#{orderNum,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<select id="getTaskLists" resultType="com.lmy.pojo.TaskList">
+		select id,title,order_num
+		orderNum,project_id projectId from task_list order by order_num asc
+	</select>
+	
+<!-- 	<select id="getTaskListsAllNew" resultMap="taskListsNew">
+		select
+		a1.id,a1.title,a1.order_num orderNum,a1.project_id projectId,
+		a2.id,a2.title,a2.desc_t descT,a2.completed,a2.priority,a2.due_date dueDate,
+		a2.reminder,a2.remark,a2.create_date createDate,a2.owner_id ownerId,
+		a3.id,a3.name,a3.avatar,a3.email
+		from task_list a1,task a2,user_t a3 WHERE a1.id=a2.task_list_id and a2.owner_id =a3.id;
+	</select> -->
+
+	<select id="getTaskListsAll" resultMap="taskLists">
+		select
+		a1.id,a1.title,a1.order_num orderNum,a1.project_id projectId,
+		a2.id taskId,a2.title taskTitle,a2.desc_t descT,a2.completed,a2.priority,a2.due_date dueDate,
+		a2.reminder,a2.remark,a2.create_date createDate,a2.owner_id ownerId,a2.task_list_id taskListId,
+		a3.id userId,a3.name,a3.avatar,a3.email
+		from task_list a1,task a2,user_t a3 WHERE 
+		a1.id=a2.task_list_id and a2.owner_id =a3.id order by a1.order_num asc
+	</select>
+	
+	<!-- <select id="getTasks" parameterType="int" resultType="com.lmy.pojo.Task">
+		
+	</select>
+	
+	<resultMap type="com.lmy.pojo.TaskList" id="taskListsNew">
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="orderNum" property="orderNum" />
+		<result column="projectId" property="projectId" />
+		<collection property="tasks" ofType="com.lmy.pojo.Task" select="getTasks" column="id">
+			<id column="id" property="id" />
+			<result column="title" property="title" />
+			<result column="descT" property="descT" />
+			<result column="completed" property="completed" />
+			<result column="priority" property="priority" />
+			<result column="dueDate" property="dueDate" />
+			<result column="reminder" property="reminder" />
+			<result column="remark" property="remark" />
+			<result column="createDate" property="createDate" />
+			<result column="ownerId" property="ownerId" />
+			<association property="user" javaType="com.lmy.pojo.User">
+				<id column="id" property="id" />
+				<result column="name" property="name" />
+				<result column="avatar" property="avatar" />
+				<result column="email" property="email" />
+			</association>
+		</collection>
+	</resultMap> -->
+
+	<resultMap type="com.lmy.pojo.TaskList" id="taskLists">
+		<id column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="orderNum" property="orderNum" />
+		<result column="projectId" property="projectId" />
+		<collection property="tasks" ofType="com.lmy.pojo.Task">
+			<id column="taskId" property="id" />
+			<result column="taskTitle" property="title" />
+			<result column="descT" property="descT" />
+			<result column="completed" property="completed" />
+			<result column="priority" property="priority" />
+			<result column="dueDate" property="dueDate" />
+			<result column="reminder" property="reminder" />
+			<result column="remark" property="remark" />
+			<result column="createDate" property="createDate" />
+			<result column="ownerId" property="ownerId" />
+			<result column="taskListId" property="taskListId" />
+			<association property="user" javaType="com.lmy.pojo.User">
+				<id column="userId" property="id" />
+				<result column="name" property="name" />
+				<result column="avatar" property="avatar" />
+				<result column="email" property="email" />
+			</association>
+		</collection>
+	</resultMap>
+</mapper>

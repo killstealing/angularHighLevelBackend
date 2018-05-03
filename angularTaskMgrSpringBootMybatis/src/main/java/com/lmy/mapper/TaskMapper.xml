@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmy.mapper.TaskMapper">
+	<select id="getTasksByTaskListId" parameterType="int" resultMap="tasks">
+		select a1.id,a1.title,a1.desc_t descT,a1.completed,a1.priority,a1.due_date dueDate,a1.reminder,a1.remark,
+		a1.create_date createDate,a1.owner_id ownerId,a1.task_list_id taskListId,a2.id userId,a2.email,a2.name,
+		a2.avatar
+		from task a1, user_t a2 where a1.task_list_id=#{taskListId} and a1.owner_id=a2.id order by a1.id asc
+	</select>
+	
+	<resultMap type="com.lmy.pojo.Task" id="tasks">
+		<id column="id" property="id"/>
+		<result column="title" property="title"/>
+		<result column="descT" property="descT"/>
+		<result column="completed" property="completed"/>
+		<result column="priority" property="priority"/>
+		<result column="dueDate" property="dueDate"/>
+		<result column="reminder" property="reminder"/>
+		<result column="remark" property="remark"/>
+		<result column="createDate" property="createDate"/>
+		<result column="ownerId" property="ownerId"/>
+		<result column="taskListId" property="taskListId"/>
+		<association property="user" javaType="com.lmy.pojo.User">
+			<id column="userId" property="id" />
+			<result column="name" property="name" />
+			<result column="avatar" property="avatar" />
+			<result column="email" property="email" />
+		</association>
+	</resultMap>
+	
+	<insert id="doInsertTask" parameterType="com.lmy.pojo.Task">
+		insert into task (title,desc_t,completed,priority,due_date,
+		reminder,remark,create_date,owner_id,task_list_id) values(
+		#{title},#{descT},#{completed},#{priority},#{dueDate},
+		#{reminder},#{remark},#{createDate},#{ownerId},#{taskListId}
+		)
+	</insert>
+</mapper>

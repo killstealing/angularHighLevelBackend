@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmy.mapper.ProjectMapper">
+	<select id="getProjects" resultType="com.lmy.pojo.Project">
+		select id,title,desc_t descT,image from project
+	</select>
+	<insert id="doInsert">
+		insert into project values (default,#{title},#{descT},
+		'./../../../assets/img/covers/0.jpg')
+	</insert>
+	<update id="doUpdate" parameterType="com.lmy.pojo.Project">
+		update project
+		<set>
+			<if test="title!=null">
+				title=#{title},
+			</if>
+			<if test="descT!=null">
+				desc_t=#{descT},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<delete id="doDel" parameterType="int">
+		delete from project where id=#{id}
+	</delete>
+</mapper>

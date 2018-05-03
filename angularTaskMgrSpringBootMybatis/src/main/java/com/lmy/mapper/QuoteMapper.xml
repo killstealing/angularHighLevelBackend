@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmy.mapper.QuoteMapper">
+	<select id="getQuotes" resultType="com.lmy.pojo.Quote">
+		select * from quote_t
+	</select>
+	
+	<select id="getRandomQuote" resultType="com.lmy.pojo.Quote">
+		SELECT * FROM QUOTE_T WHERE ID >= ((SELECT MAX(ID) FROM QUOTE_T)-(SELECT MIN(ID) FROM QUOTE_T)) * RAND()
+	 + (SELECT MIN(ID) FROM QUOTE_T)  LIMIT 1
+	</select>
+</mapper>
